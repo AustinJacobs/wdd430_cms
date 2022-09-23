@@ -1,0 +1,19 @@
+<div class="panel panel-default">
+  <div class="panel-heading">
+    <div class="row">
+      <h3 style="margin-left: 1.75rem;">{{contact.name}}</h3>
+    </div>
+    <div class="row">
+      <img [src]="contact.imageUrl" alt="{{ contact.name }}" class="img-responsive" style="max-height: 100px; margin-left: 1.4rem; display: inline;"/>
+      <div class="flex-col pull-right btn-toolbar" style="margin-right: .8rem; margin-top: 3.5rem; margin-bottom: 1rem;">
+        <a href="#" class="btn btn-primary">Edit</a>
+        <a href="#" class="btn btn-danger">Delete</a>
+      </div>
+    </div>
+  </div>
+
+  <div class="panel-body">
+    <p><strong>Email: </strong>{{ contact.email }}</p>
+    <p><strong>Phone: </strong>{{ contact.phone }}</p>
+  </div>
+</div>
