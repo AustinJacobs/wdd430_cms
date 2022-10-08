@@ -33,7 +33,6 @@ export class MessageListComponent implements OnInit {
   ngOnInit(): void {}
 
   onAddMessage(message: Message) {
-    //push message to array of messages
     this.messages.push(message);
   }
 }
