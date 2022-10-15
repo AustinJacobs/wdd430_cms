@@ -8,13 +8,10 @@ import { MessageService } from '../message.service';
   styleUrls: ['./message-edit.component.css'],
 })
 export class MessageEditComponent implements OnInit {
-  //references to the DOM
   @ViewChild('subject') subject: ElementRef;
   @ViewChild('msgText') msgText: ElementRef;
-  //output event emitter
   @Output() addMessageEvent = new EventEmitter<Message>();
-  //current sender
-  currentSender: string = 'Austin';
+  currentSender: string = '1';
 
   constructor(private messageService: MessageService) {}
 
@@ -23,7 +20,7 @@ export class MessageEditComponent implements OnInit {
   onSendMessage() {
     const subject = this.subject.nativeElement.value;
     const msgText = this.msgText.nativeElement.value;
-    const message = new Message('5', subject, msgText, this.currentSender);
+    const message = new Message('4', subject, msgText, this.currentSender);
     this.messageService.addMessage(message);
   }
 
