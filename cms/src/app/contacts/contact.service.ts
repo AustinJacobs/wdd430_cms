@@ -19,12 +19,11 @@ export class ContactService {
   }
 
   getContact(id: string) {
-    this.contacts.forEach((contact) => {
+    for (const contact of this.contacts) {
       if (contact.id === id) {
         return contact;
       }
-    });
-    
+    }
     return null;
   }
 }
