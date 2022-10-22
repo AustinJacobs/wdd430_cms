@@ -3,6 +3,7 @@
     <div class="row">
       <h4 class="pull-left" style="margin-left: 12px">Documents</h4>
       <a
+        routerLink="new"
         class="btn btn-success pull-right"
         style="margin-right: 10px; margin-top: 4px"
         >Add Document</a
@@ -15,7 +16,6 @@
       <cms-document-item
         *ngFor="let document of documents"
         [document]="document"
-        (click)="onSelectedDocument(document)"
       ></cms-document-item>
     </div>
   </div>
