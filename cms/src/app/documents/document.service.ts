@@ -1,6 +1,7 @@
-import { Injectable, EventEmitter } from '@angular/core';
+import { Injectable } from '@angular/core';
 import { Document } from './document.model';
 import { MOCKDOCUMENTS } from './MOCKDOCUMENTS';
+import { Subject } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
@@ -8,10 +9,13 @@ import { MOCKDOCUMENTS } from './MOCKDOCUMENTS';
 export class DocumentService {
   documents: Document[];
 
-  documentChangedEvent = new EventEmitter<Document[]>();
+  documentListChangedEvent = new Subject<Document[]>();
+
+  maxDocumentId: number;
 
   constructor() {
     this.documents = MOCKDOCUMENTS;
+    this.maxDocumentId = this.getMaxId();
   }
 
   getDocuments(): Document[] {
@@ -27,8 +31,51 @@ export class DocumentService {
     return null;
   }
 
+  getMaxId(): number {
+    let maxId = 0;
+    for (const document of this.documents) {
+      const currentId = +document.id;
+      if (currentId > maxId) {
+        maxId = currentId;
+      }
+    }
+    return maxId;
+  }
+
+  addDocument(newDocument: Document) {
+    if (newDocument === null || newDocument === undefined) {
+      return;
+    }
+    this.maxDocumentId++;
+    newDocument.id = this.maxDocumentId.toString();
+    this.documents.push(newDocument);
+    const documentListClone = this.documents.slice();
+    this.documentListChangedEvent.next(documentListClone);
+  }
+
+  updateDocument(originalDocument: Document, newDocument: Document) {
+    if (
+      originalDocument === null ||
+      originalDocument === undefined ||
+      newDocument === null ||
+      newDocument === undefined
+    ) {
+      return;
+    }
+
+    const pos = this.documents.indexOf(originalDocument);
+    if (pos < 0) {
+      return;
+    }
+
+    newDocument.id = originalDocument.id;
+    document[pos] = newDocument;
+    const documentListClone = this.documents.slice();
+    this.documentListChangedEvent.next(documentListClone);
+  }
+
   deleteDocument(document: Document) {
-    if (!document) {
+    if (document === null || document === undefined) {
       return;
     }
     const pos = this.documents.indexOf(document);
@@ -36,6 +83,6 @@ export class DocumentService {
       return;
     }
     this.documents.splice(pos, 1);
-    this.documentChangedEvent.emit(this.documents.slice());
+    this.documentListChangedEvent.next(this.documents.slice());
   }
 }
