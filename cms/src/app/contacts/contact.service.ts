@@ -44,6 +44,18 @@ export class ContactService {
     return null;
   }
 
+  deleteContact(contact: Contact) {
+    if (contact === null || contact === undefined) {
+      return;
+    }
+    const pos = this.contacts.indexOf(contact);
+    if (pos < 0) {
+      return;
+    }
+    this.contacts.splice(pos, 1);
+    this.contactListChangedEvent.next(this.contacts.slice());
+  }
+
   addContact(newContact: Contact) {
     if (newContact === null || newContact === undefined) {
       return;
@@ -52,8 +64,7 @@ export class ContactService {
     this.maxContactId++;
     newContact.id = this.maxContactId.toString();
     this.contacts.push(newContact);
-    const contactListClone = this.contacts.slice();
-    this.contactListChangedEvent.next(contactListClone);
+    this.contactListChangedEvent.next(this.contacts.slice());
   }
 
   updateContact(originalContact: Contact, newContact: Contact) {
@@ -72,20 +83,7 @@ export class ContactService {
     }
 
     newContact.id = originalContact.id;
-    document[pos] = newContact;
-    const contactListClone = this.contacts.slice();
-    this.contactListChangedEvent.next(contactListClone);
-  }
-
-  deleteContact(contact: Contact) {
-    if (contact === null || contact === undefined) {
-      return;
-    }
-    const pos = this.contacts.indexOf(contact);
-    if (pos < 0) {
-      return;
-    }
-    this.contacts.splice(pos, 1);
+    this.contacts[pos] = newContact;
     this.contactListChangedEvent.next(this.contacts.slice());
   }
 }

@@ -23,5 +23,30 @@
   <div class="panel-body">
     <p><strong>Email: </strong>{{ contact.email }}</p>
     <p><strong>Phone: </strong>{{ contact.phone }}</p>
+    <div class="row" *ngIf="contact.group">
+      <div class="col-xs-12">
+        <strong>Contacts in Team:</strong>
+        <div class="panel-body" *ngIf="contact.group">
+          <div class="row">
+            <div
+              class="col-xs-12 list-group-item"
+              *ngFor="let contact of contact.group"
+            >
+              <div class="pull-left">
+                <h4 class="list-group-item-heading">{{ contact.name }}</h4>
+              </div>
+              <span class="pull-right">
+                <img
+                  src="{{ contact.imageUrl }}"
+                  alt="{{ contact.name }}"
+                  class="img-responsive"
+                  style="max-height: 80px"
+                />
+              </span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 </div>

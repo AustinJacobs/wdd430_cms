@@ -69,9 +69,8 @@ export class DocumentService {
     }
 
     newDocument.id = originalDocument.id;
-    document[pos] = newDocument;
-    const documentListClone = this.documents.slice();
-    this.documentListChangedEvent.next(documentListClone);
+    this.documents[pos] = newDocument;
+    this.documentListChangedEvent.next(this.documents.slice());
   }
 
   deleteDocument(document: Document) {
