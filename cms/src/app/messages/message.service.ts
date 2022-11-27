@@ -25,45 +25,31 @@ export class MessageService {
     return maxId;
   }
 
-  getMessages() {
-    this.http
-      .get('https://atjcms-default-rtdb.firebaseio.com/messages.json')
-      .subscribe(
-        (messages: any) => {
-          this.messages = messages;
-          this.maxMessageId = this.getMaxId();
-          this.messages.sort((first: Message, second: Message) => {
-            if (first.id < second.id) {
-              return -1;
-            } else if (first.id === second.id) {
-              return 0;
-            } else {
-              return 1;
-            }
-          });
-          this.messageListChangedEvent.next(this.messages.slice());
-          // console.log(this.documents.slice());
-        },
-        (error: any) => {
-          console.error(error);
-        }
-      );
+  sortAndSend() {
+    this.messages.sort((first, second) => {
+      if (first < second) return -1;
+      if (first > second) return 1;
+      return 0;
+    });
+    this.messageListChangedEvent.next(this.messages.slice());
   }
 
-  storeMessages() {
-    let json = JSON.stringify(this.messages);
-    const headers = new HttpHeaders();
-    headers.set('Content-Type', 'application/json');
+  getMessages() {
     this.http
-      .put<{ message: string }>(
-        'https://atjcms-default-rtdb.firebaseio.com/messages.json',
-        json,
-        {
-          headers: headers,
-        }
+      .get<{ message: string; messageObjects: Message[] }>(
+        'http://localhost:3000/messages'
       )
-      .subscribe(() => {
-        this.messageListChangedEvent.next(this.messages.slice());
+      .subscribe({
+        next: (response) => {
+          console.log(response.message);
+          console.log(response.messageObjects);
+          this.messages = response.messageObjects;
+          this.sortAndSend();
+        },
+        error: (error) => {
+          console.error(error.message);
+          console.error(error.error);
+        },
       });
   }
 
@@ -76,8 +62,25 @@ export class MessageService {
     return null;
   }
 
-  addMessage(message: Message) {
-    this.messages.push(message);
-    this.storeMessages();
+  addMessage(newMessage: Message) {
+    if (!newMessage) return;
+    newMessage.id = '';
+    this.http
+      .post<{ message: string; messageObject: Message }>(
+        'http://localhost:3000/messages/',
+        newMessage,
+        { headers: new HttpHeaders().set('Content-Type', 'application/json') }
+      )
+      .subscribe({
+        next: (response) => {
+          console.log(response.message);
+          this.messages.push(response.messageObject);
+          this.sortAndSend();
+        },
+        error: (error) => {
+          console.error(error.message);
+          console.error(error.error);
+        },
+      });
   }
 }

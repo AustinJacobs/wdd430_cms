@@ -11,7 +11,7 @@ export class MessageEditComponent implements OnInit {
   @ViewChild('subject') subject: ElementRef;
   @ViewChild('msgText') msgText: ElementRef;
   @Output() addMessageEvent = new EventEmitter<Message>();
-  currentSender: string = '1';
+  currentSender: string = '63827d8d9df04c0305efde28';
 
   constructor(private messageService: MessageService) {}
 
@@ -20,7 +20,7 @@ export class MessageEditComponent implements OnInit {
   onSendMessage() {
     const subject = this.subject.nativeElement.value;
     const msgText = this.msgText.nativeElement.value;
-    const message = new Message('4', subject, msgText, this.currentSender);
+    const message = new Message(subject, msgText, this.currentSender);
     this.messageService.addMessage(message);
   }
 
